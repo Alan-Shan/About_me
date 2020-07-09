@@ -1,19 +1,31 @@
 package top.ilum.aboutme
 
+import android.app.Activity
 import android.content.Intent
 import android.net.Uri
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.Button
+import android.widget.ImageButton
 import android.widget.TextView
 import androidx.core.content.ContextCompat.startActivity
 import androidx.recyclerview.widget.RecyclerView
+import kotlinx.android.synthetic.main.header_item.view.*
 import kotlinx.android.synthetic.main.headerme_item.view.*
 import kotlinx.android.synthetic.main.project_item.view.*
+import kotlinx.android.synthetic.main.project_item.view.header
 import kotlinx.android.synthetic.main.skill_item.view.*
+import java.util.ArrayList
 
-class Adapter(private val infoList: List<Me>) : RecyclerView.Adapter<RecyclerView.ViewHolder>() {
+class Adapter : RecyclerView.Adapter<RecyclerView.ViewHolder>() {
+    var filterActive = false
+    var possibleChecks = ArrayList<Int>()
+    var infoList = ArrayList<Me>()
+        set(value) {
+            field = value
+            notifyDataSetChanged()
+        }
 
     override fun getItemViewType(position: Int): Int =
         when (infoList[position]) {
@@ -87,11 +99,22 @@ class Adapter(private val infoList: List<Me>) : RecyclerView.Adapter<RecyclerVie
 
     internal class ViewHolderHeader(itemView: View) : RecyclerView.ViewHolder(itemView) {
         var header: TextView = itemView.header
+        var filter: ImageButton = itemView.filter
     }
 
     private fun initLayoutHeader(holder: ViewHolderHeader, pos: Int) {
         val item = infoList[pos] as Me.HeaderItem
         holder.header.text = item.header
+        if (filterActive) { holder.filter.setImageResource(R.drawable.vector_checked) } else { holder.filter.setImageResource(R.drawable.vector) }
+        holder.filter.setOnClickListener {
+            startActivity(
+                it.context,
+                Intent(it.context, FilterActivity::class.java).addFlags(Intent.FLAG_ACTIVITY_REORDER_TO_FRONT)
+                    .putExtra("checks", possibleChecks),
+                null
+            )
+            (it.context as Activity).finish()
+        }
     }
 
     internal class ViewHolderSkill(itemView: View) : RecyclerView.ViewHolder(itemView) {
@@ -118,5 +141,8 @@ class Adapter(private val infoList: List<Me>) : RecyclerView.Adapter<RecyclerVie
         private const val PROJECT = 2
         private const val HEADER = 3
         private const val SKILL = 4
+    }
+    fun updateData(ItemList: ArrayList<Me>) {
+        this.infoList = ItemList
     }
 }
