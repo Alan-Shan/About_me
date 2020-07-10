@@ -39,7 +39,6 @@ class MainActivity : AppCompatActivity() {
 
     override fun onResume() {
         super.onResume()
-        Log.e("aaa", "aaa")
         val intent = intent
         val value = intent.getIntegerArrayListExtra("key")
         if (value != null) {
