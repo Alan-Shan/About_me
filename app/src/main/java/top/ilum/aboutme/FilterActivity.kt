@@ -31,11 +31,7 @@ class FilterActivity : AppCompatActivity() {
             if (it.isNullOrEmpty()) {
                 checkboxall.isChecked = false
             }
-            if (possibleChecks.size ==  it.size) {
-                checkboxall.isChecked = true
-            } else {
-                checkboxall.isChecked = false
-            }
+            checkboxall.isChecked = possibleChecks.size ==  it.size
             checked = it
         }.apply { items = possibleChecks }
         checkboxall.setOnClickListener {
@@ -43,8 +39,8 @@ class FilterActivity : AppCompatActivity() {
                 (recycle_filters.adapter as FilterAdapter).apply { isSelectedAll = true }
             } else {
                 (recycle_filters.adapter as FilterAdapter).apply { isSelectedAll = false }
-                checked.clear()
             }
+            checked.clear()
             (recycle_filters.adapter as FilterAdapter).notifyDataSetChanged()
         }
         if (checked.isNullOrEmpty()) {

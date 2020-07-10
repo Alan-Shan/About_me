@@ -46,9 +46,9 @@ class MainActivity : AppCompatActivity() {
             infolist = checker(infolist, value) as ArrayList<Me>
             (recycler.adapter as Adapter).apply { filterActive = true }
                 .updateData(infolist)
-        }
-        if (value == possiblechecks) {
-            (recycler.adapter as Adapter).apply { filterActive = false }
+            if (value.size == possiblechecks.size) {
+                (recycler.adapter as Adapter).apply { filterActive = false }.notifyDataSetChanged()
+            }
         }
     }
 
